@@ -142,12 +142,15 @@ def begin_draw(width, height, pixel_values):
     yindex = 0
     for pixel_value in (pixel_values):
         print(pixel_value)
-        select_color(pixel_value[0], pixel_value[1], pixel_value[2])
-        send_click_event(13 + xindex, 152 + yindex)
-        xindex += 1
-        if xindex == width:
-            xindex = 0
-            yindex += 1
+        try:
+            select_color(pixel_value[0], pixel_value[1], pixel_value[2])
+            send_click_event(13 + xindex, 152 + yindex)
+            xindex += 1
+            if xindex == width:
+                xindex = 0
+                yindex += 1
+        except:
+            pass
 
 def main(argc, argv):
     image = read_image_pixel_array(argv[1])
