@@ -150,7 +150,7 @@ def begin_draw(width, height, pixel_values):
             yindex += 1
 
 def main(argc, argv):
-    image = read_image_pixel_array(argv[0])
+    image = read_image_pixel_array(argv[1])
     prepare_paint_window()
     begin_draw(image[0], image[1], image[2])
 
