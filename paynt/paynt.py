@@ -23,14 +23,14 @@ COLORS = (
     (163, 73, 164),
     (255, 255, 255),
     (195, 195, 195),
-    (136, 0, 21),
-    (237, 28, 36),
-    (255, 127, 39),
-    (255, 242, 0),
-    (34, 177, 76),
-    (0, 162, 232),
-    (63, 72, 204),
-    (163, 73, 164),
+    (185, 122, 87),
+    (255, 174, 201),
+    (255, 201, 14),
+    (239, 228, 176),
+    (181, 230, 29),
+    (153, 217, 234),
+    (112, 146, 190),
+    (200, 191, 231),
 )
 
 COLOR_PALETTE_MAP = {
@@ -46,14 +46,14 @@ COLOR_PALETTE_MAP = {
     "#a349a4": (960, 62), #(163, 73, 164)
     "#ffffff": (765, 85), #(255, 255, 255)
     "#c3c3c3": (785, 85), #(195, 195, 195)
-    "#880015": (805, 85), #(136, 0, 21)
-    "#ed1c24": (825, 85), #(237, 28, 36)
-    "#ff7f27": (850, 85), #(255, 127, 39)
-    "#fff200": (870, 85), #(255, 242, 0)
-    "#22b14c": (895, 85), #(34, 177, 76)
-    "#00a2e8": (915, 85), #(0, 162, 232)
-    "#3f48cc": (940, 85), #(63, 72, 204)
-    "#a349a4": (960, 85), #(163, 73, 164)
+    "#b97a57": (805, 85), #(185, 122, 87)
+    "#ffaec9": (825, 85), #(255, 174, 201)
+    "#ffc90e": (850, 85), #(255, 201, 14)
+    "#efe4b0": (870, 85), #(239, 228, 176)
+    "#b5e61d": (895, 85), #(181, 230, 29)
+    "#99d9ea": (915, 85), #(153, 217, 234)
+    "#7092be": (940, 85), #(112, 146, 190)
+    "#c8bfe7": (960, 85), #(200, 191, 231)
 }
 
 PAYNT_MOUSE_LEFT_CLICK = 0
@@ -63,12 +63,9 @@ PAYNT_MOUSE_RIGHT_CLICK = 2
 def move_cursor(x, y):
     win32api.SetCursorPos((x, y))
 
-
-move_cursor(960, 62)
-
 def send_click_event(x, y, button = PAYNT_MOUSE_LEFT_CLICK):
     win32api.SetCursorPos((x, y))
-    time.sleep(0.0001)
+    time.sleep(0.000001)
     if button == PAYNT_MOUSE_LEFT_CLICK:
         win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, x, y, 0, 0)
         win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, x, y, 0, 0)
@@ -140,23 +137,21 @@ def prepare_paint_window():
     send_double_click_event(150, 10)
     select_pencil_tool()
 
-def begin_draw(pixel_values):
-    xindex = pixel_values.shape[0]
+def begin_draw(width, height, pixel_values):
+    xindex = 0
     yindex = 0
     for pixel_value in (pixel_values):
-        xindex = pixel_values.shape[0]
-        for sub_pixel_value in (pixel_value):
-            print(sub_pixel_value)
-            select_color(sub_pixel_value[0], sub_pixel_value[1], sub_pixel_value[2])
-            send_click_event(13 + xindex, 152 + yindex)
-            xindex -= 1
-        yindex += 1
+        print(pixel_value)
+        select_color(pixel_value[0], pixel_value[1], pixel_value[2])
+        send_click_event(13 + xindex, 152 + yindex)
+        xindex += 1
+        if xindex == width:
+            xindex = 0
+            yindex += 1
 
 def main(argc, argv):
-    #image = get_image("C:/Users/azeez/Pictures/Screenshots/Screenshot (1) - Copy.jpg")
-    #prepare_paint_window()
-    #begin_draw(image)
-    #print(image.shape)
-    pass
+    image = read_image_pixel_array(argv[0])
+    prepare_paint_window()
+    begin_draw(image[0], image[1], image[2])
 
 main(len(sys.argv), sys.argv)
